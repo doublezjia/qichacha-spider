@@ -153,7 +153,7 @@ def main():
 			print ('企查查页面地址:%s' % conpany_url)
 			contentPage(conpany_url)
 			
-			tnum = random.randint(2,10)
+			tnum = random.randint(2,8)
 			print ('防止网站禁止爬虫，等待%s秒' % tnum)
 			time.sleep(tnum)
 
