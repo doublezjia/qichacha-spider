@@ -6,11 +6,12 @@
 # @Version : $Id$
 # @@Desc   : 获取企查查广东地区的企业信息
 
-import os,requests,sys,csv
+import os,requests,sys,csv,time,random
 from bs4 import BeautifulSoup
+from datetime import datetime
 
 # 企查查广东地区的页面列表地址
-base_url = 'https://www.qichacha.com/g_GD_1.html'
+base_url = 'https://www.qichacha.com/g_GD_{pagenum}.html'
 # 企查查网站地址，用于补全获取的URL地址
 head_url = 'https://www.qichacha.com'
 # 请求头
@@ -141,23 +142,35 @@ def contentPage(url):
 
 # 主函数，获取企查查中显示的企业页面地址
 def main():
-	req  = requests.get(base_url,headers=headers)
-	soup = BeautifulSoup(req.text,'html.parser')
-	data = soup.find_all(class_='panel-default')
-	for item in data:
-		# 获取每个页面的地址，然后发送到contentPage中处理
-		conpany_url =head_url+item.find('a',{'class':'list-group-item clearfix'})['href']
-		print ('企查查页面地址:%s' % conpany_url)
-		contentPage(conpany_url)
-		# sys.exit()
+	for num in range(1,3):
+		url = base_url.format(pagenum=num)
+		req  = requests.get(url,headers=headers)
+		soup = BeautifulSoup(req.text,'html.parser')
+		data = soup.find_all(class_='panel-default')
+		for item in data:
+			# 获取每个页面的地址，然后发送到contentPage中处理
+			conpany_url =head_url+item.find('a',{'class':'list-group-item clearfix'})['href']
+			print ('企查查页面地址:%s' % conpany_url)
+			contentPage(conpany_url)
+			
+			tnum = random.randint(2,10)
+			print ('防止网站禁止爬虫，等待%s秒' % tnum)
+			time.sleep(tnum)
 
 
 if __name__ == '__main__':
-
+	# 获取爬虫开始时间
+	start_time = datetime.now()
+	print ('获取企查查广东地区的企业信息')
+	print ('爬虫开始')
 	# csv文件表格的列表头
 	with open('qichacha_company.csv','w',newline='') as datacsv:
 		csvwriter = csv.writer(datacsv,dialect=('excel'))
 		csvwriter.writerow(csv_List_head)
-
 	main()
+	# 获取爬虫结束时间
+	end_time = datetime.now()
+	# 获取爬虫花费的时间
+	use_time = end_time - start_time
+	print ('爬虫结束,耗时%s，数据保存在qichacha_company.csv中' % use_time)
 
