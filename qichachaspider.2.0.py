@@ -47,7 +47,7 @@ def contentPage(url):
 		try:
 			conpanyname = soup.find('div',{'class':'row title'}).h1.text.strip()
 		except AttributeError:
-			sys.exit('获取不了目标页面内容,爬虫自动退出,请检查目标页面是否正常打开')
+			sys.exit('获取不了目标页面内容,爬虫自动退出,请检查目标页面是否正常打开或者自动跳转到首页')
 		# 获取电话、邮箱、官网、公司地址信息
 		row = soup.find('div',{'class':'content'}).find_all('div',{'class':'row'})
 		for i in row:
