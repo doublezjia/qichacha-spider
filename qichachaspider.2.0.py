@@ -19,6 +19,9 @@ headers = {
 	'User-Agent':'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:60.0) Gecko/20100101 Firefox/60.0'
 }
 
+# cookies 通过登录网站可以获取 以字典形式保存
+# cookies = {}
+
 # csv的列表头
 csv_List_head=('企业名称','曾用名','法定代表人','联系电话','邮箱地址','官方网站','企业地址',
 	'所属行业','公司类型','经营状态','经营方式','人员规模','所属地区','营业期限','经营范围',
@@ -35,6 +38,7 @@ def save_csv(msg):
 # 获取页面内容
 def contentPage(url):
 	url = url
+	# 获取完整的电话号码和邮箱地址，请在requets.get()中添加cookies=cookies
 	req = requests.get(url,headers=headers)
 	soup = BeautifulSoup(req.text,'html.parser')
 	# 判断网站是否正常打开
